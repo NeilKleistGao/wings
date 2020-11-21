@@ -3,4 +3,4 @@ project(wings)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(wings main.cc)
+add_executable(wings main.cc wing_tcp.h)
