@@ -23,6 +23,7 @@
 // LAST MODIFY: 2020/10/23
 
 #include <iostream>
+#include "wing_tcp_client.h"
 int main(){
-
+    std::cout << inet_ntop()
 }
