@@ -22,6 +22,7 @@
 // FILENAME: main.cc
 // LAST MODIFY: 2020/10/23
 
-int main() {
-    return 0;
+#include <iostream>
+int main(){
+
 }
