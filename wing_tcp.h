@@ -13,6 +13,7 @@
 #include <exception>
 #include <arpa/inet.h>
 #include <string>
+#include <unistd.h>
 namespace WINGS {
     using Status = const int;
     Status Server = 0;
@@ -54,34 +55,49 @@ namespace WINGS {
                 return -1;
             }
             try {
-                // socket()
-                listen_fd = socket(AF_INET,SOCK_STREAM,0);
-                if(listen_fd<0){
-                    std::cerr<< "Server Can't create socket.";
-                    return -1;
+                while(true) {
+                    // socket()
+                    listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+                    if (listen_fd < 0) {
+                        std::cerr << "Server Can't create socket.";
+                        return -1;
+                    }
+                    // bind()
+                    sockaddr_in server_addr;
+                    server_addr.sin_family = AF_INET;
+                    server_addr.sin_addr.s_addr = this->addr;
+                    server_addr.sin_port = this->port;
+                    auto temp = bind(listen_fd, (sockaddr * ) & server_addr, sizeof(server_addr));
+                    if (temp < 0) {
+                        std::cerr << "Server Bind failed.";
+                        return -1;
+                    }
+                    // listen()
+                    if (listen(listen_fd, 5) < 0) {
+                        std::cerr << "Server Listen failed.";
+                        return -1;
+                    }
+                    // accept()
+                    const int MAXBUF = 1024;
+                    char buffer[MAXBUF];
+                    sockaddr_in client_addr;
+                    socklen_t client_addr_len = sizeof(client_addr);
+                    server_fd = accept(listen_fd, (sockaddr * ) & client_addr, &client_addr_len);
+                    if (server_fd > 0) {
+                        std::cout << "服务器已成功连接到";
+                        std::cout<< " "<<client_addr.sin_addr.s_addr <<":"<<client_addr.sin_port<<"\n";
+                        pid_t fpid = fork();
+                        if(fpid > 0){
+                            ::close(server_fd);
+                            continue;
+                        }else if(fpid == 0){
+                            ::close(listen_fd);
+                            break;
+                        }else{
+                            std::cerr<<"error in fork!";
+                        }
+                    }
                 }
-                // bind()
-                sockaddr_in server_addr;
-                server_addr.sin_family = AF_INET;
-                server_addr.sin_addr.s_addr = this->addr;
-                server_addr.sin_port = this->port;
-                auto temp = bind(listen_fd, (sockaddr*)&server_addr,sizeof(server_addr));
-                if(temp<0){
-                    std::cerr<<"Server Bind failed.";
-                    return -1;
-                }
-                // listen()
-                if(listen(listen_fd,5)<0){
-                    std::cerr<<"Server Listen failed.";
-                    return -1;
-                }
-                // accept()
-                const int MAXBUF = 1024;
-                char buffer[MAXBUF];
-                sockaddr_in client_addr;
-                socklen_t client_addr_len = sizeof(client_addr);
-                server_fd = accept(listen_fd,(sockaddr*)&client_addr,&client_addr_len);
-                std::cout<<"成功连接\n";
                 return 0;
             } catch (std::exception e) {
                 std::cerr << e.what();
