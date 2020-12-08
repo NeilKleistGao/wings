@@ -1,6 +1,4 @@
-/**
- * @copybrief
- * MIT License
+/** MIT License
  * Copyright (c) 2020 NeilKleistGao
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +19,12 @@
  * SOFTWARE.
  */
 
-/// @file inet_address.h
+/// @file wings.h
 
-#ifndef WINGS_INET_ADDRESS_H
-#define WINGS_INET_ADDRESS_H
+#ifndef WINGS_WINGS_H
+#define WINGS_WINGS_H
 
-namespace wings {
+#include "socket/socket.h"
+#include "socket/server_socket.h"
 
-class InetAddress {
-public:
-private:
-};
-
-} // namespace wings
-
-#endif //WINGS_INET_ADDRESS_H
+#endif //WINGS_WINGS_H

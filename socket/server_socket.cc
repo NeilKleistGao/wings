@@ -30,7 +30,7 @@
 namespace wings {
 ServerSocket::ServerSocket(const std::string& addr, const unsigned int& port) {
 #ifdef PLATFORM_LINUX
-    this->_port = htonl(port);
+    this->_port = htons(port);
     in_addr temp{};
     inet_aton(addr.c_str(), &temp);
     this->_addr = temp.s_addr;

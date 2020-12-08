@@ -5,12 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_definitions(-D PLATFORM_LINUX)
 
+include(socket/CMakeLists.txt)
+include(platforms/CMakeLists.txt)
+
 include_directories(.)
 
 add_executable(wings main.cc
-        platforms/linux.h
-        platforms/platforms.h
-        socket/server_socket.h
-        socket/server_socket.cc
-        socket/socket.h
-        socket/socket.cc socket/inet_address.h)
+        ${PLATFORM_HEADER}
+        ${PLATFORM_SRC}
+        ${SOCKET_HEADER}
+        ${SOCKET_SRC} wings.h)

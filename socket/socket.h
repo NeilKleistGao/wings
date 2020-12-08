@@ -30,12 +30,14 @@
 
 #include "platforms/platforms.h"
 #include "inet_address.h"
-#include "server_socket.h"
 
 namespace wings {
 
 class Socket {
 public:
+    Socket(const int& socket_id) :_socket_id(socket_id) {
+
+    }
     Socket(const std::string& addr, const unsigned int port);
     ~Socket();
 
@@ -52,9 +54,7 @@ public:
         return InetAddress{}; /// @todo
     }
 
-    friend class ServerSocket;
 private:
-    Socket(const int& socket_id);
 
 #ifdef PLATFORM_LINUX
     int _socket_id;
