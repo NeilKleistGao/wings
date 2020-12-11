@@ -1,8 +1,5 @@
-/**
- * @copybrief
- *
- * MIT License
- * Copyright (c) 2020 chui
+/** MIT License
+ * Copyright (c) 2020 chui&neilkleistgao
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,11 +20,13 @@
  *
  * */
 
-#include <iostream>
-#include "socket_udp.h"
+#include "datagram_socket.h"
 
-socket_udp::socket_udp(const string &source_addr, const unsigned int source_port, const string &target_addr,
-                       const unsigned int target_port) {
+#include <iostream>
+
+namespace wings {
+DatagramSocket::DatagramSocket(const std::string &source_addr, const unsigned int source_port, const std::string &target_addr,
+                                   const unsigned int target_port) {
 #ifdef PLATFORM_LINUX
     this->_target_port = htons(target_port);
     this->_source_port = htons(source_port);
@@ -57,11 +56,11 @@ socket_udp::socket_udp(const string &source_addr, const unsigned int source_port
 #endif //PLATFORM_LINUX
 }
 
-socket_udp::~socket_udp() {
+DatagramSocket::~DatagramSocket() {
     this->close();
 }
 
-size_t socket_udp::read(char buff[], const int &len) {
+size_t DatagramSocket::read(char buff[], const int &len) {
     if (len == 0) {
         return len;
     }
@@ -76,7 +75,7 @@ size_t socket_udp::read(char buff[], const int &len) {
 #endif //PLATFORM_LINUX
 }
 
-void socket_udp::write(const char *buff, const int &len) {
+void DatagramSocket::write(const char *buff, const int &len) {
 #ifdef PLATFORM_LINUX
     sockaddr_in temp{};
     temp.sin_family = AF_INET;
@@ -86,14 +85,10 @@ void socket_udp::write(const char *buff, const int &len) {
 #endif //PLATFORM_LINUX
 }
 
-void socket_udp::close() {
+void DatagramSocket::close() {
 #ifdef PLATFORM_LINUX
     ::close(this->_socket_id);
 #endif //PLATFORM_LINUX
 }
 
-
-
-
-
-
+} // namespace wings

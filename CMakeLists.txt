@@ -7,6 +7,7 @@ add_definitions(-D PLATFORM_LINUX)
 
 include(socket/CMakeLists.txt)
 include(platforms/CMakeLists.txt)
+include(exceptions/CMakeLists.txt)
 
 include_directories(.)
 
@@ -14,4 +15,7 @@ add_executable(wings main.cc
         ${PLATFORM_HEADER}
         ${PLATFORM_SRC}
         ${SOCKET_HEADER}
-        ${SOCKET_SRC} wings.h)
+        ${SOCKET_SRC}
+        ${EXCEPTIONS_HEADER}
+        ${EXCEPTIONS_SRC}
+        wings.h)
